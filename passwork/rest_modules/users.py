@@ -7,11 +7,12 @@ class Users:
     def __init__(self, options):
         self.options = options
 
-    def login(self):
+    def login(self, verify: bool=True):
         url = f"{self.options.host}/auth/login/{self.options.api_key}"
         response = requests.post(
             url=url,
             json={"useMasterPassword": self.options.use_master_password},
+            verify=verify,
         )
         if is_failed_log_in_status_code(status_code=response.status_code):
             raise Exception
@@ -20,11 +21,12 @@ class Users:
 
         return token, refresh_token
 
-    def get_mk_options(self):
+    def get_mk_options(self, verify: bool=True):
         # PBKDF option
         response = requests.get(
             url=f"{self.options.host}/user/get-master-key-options",
             headers={"Passwork-Auth": self.options.token},
+            verify=verify,
         )
         if is_failed_status_code(
             prefix="Failed to retrieve master key options",
@@ -33,19 +35,21 @@ class Users:
             raise Exception
         return response.json().get("data")
 
-    def logout(self):
+    def logout(self, verify: bool=True):
         response = requests.post(
             url=f"{self.options.host}/auth/logout",
             headers={"Passwork-Auth": self.options.token},
+            verify=verify,
         )
         if is_failed_status_code(prefix="Failed to log out", status_code=response.status_code):
             raise Exception
         return response.json().get("data")
 
-    def get_user_info(self):
+    def get_user_info(self, verify: bool=True):
         response = requests.get(
             url=f"{self.options.host}/user/info",
             headers=self.options.request_headers,
+            verify=verify,
         )
         if is_failed_status_code(prefix="Failed to get user info", status_code=response.status_code):
             raise Exception

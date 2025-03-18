@@ -17,20 +17,20 @@ class SessionOptions:
         self.request_headers = None
         self.user_info = None
 
-    def login(self):
+    def login(self, verify: bool=True):
         """Log in to the API and retrieve tokens"""
-        self.token, self.refresh_token = self.user.login()
+        self.token, self.refresh_token = self.user.login(verify)
 
-    def logout(self):
+    def logout(self, verify: bool=True):
         """Log out from the API"""
-        self.user.logout()
+        self.user.logout(verify)
 
-    def get_user_info(self):
+    def get_user_info(self, verify: bool=True):
         """Get user info"""
-        self.user_info = self.user.get_user_info()
+        self.user_info = self.user.get_user_info(verify)
 
-    def create_headers(self):
+    def create_headers(self, verify: bool=True):
         """Create headers for API requests"""
-        mk_options = self.user.get_mk_options()
+        mk_options = self.user.get_mk_options(verify)
         self.master_key = get_master_key(mk_options, self.master_password) if mk_options.get("mkOptions") else None
         self.request_headers = get_request_headers(self.token, self.master_key, self.use_master_password)

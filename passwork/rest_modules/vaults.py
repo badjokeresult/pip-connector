@@ -4,11 +4,12 @@ import requests
 from ..rest_modules import is_failed_status_code
 
 
-def get_vault(vault_id: str, options):
+def get_vault(vault_id: str, options, verify: bool=True):
     # receive vault item
     response = requests.get(
         url=f"{options.host}/vaults/{vault_id}",
         headers=options.request_headers,
+        verify=verify,
     )
     if is_failed_status_code(prefix=f"Vault with ID {vault_id} not found", status_code=response.status_code):
         raise Exception

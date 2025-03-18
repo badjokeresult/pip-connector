@@ -23,27 +23,27 @@ class PassworkAPI:
         """Initialize SessionOptions with host, API key, and optional master password."""
         self.session_options = SessionOptions(host, api_key, master_password)
 
-    def login(self):
+    def login(self, verify: bool=True):
         """Creates an API session using the login() method from the Users class and gets the tokens,
         then stores them in the session_options
         REST Endpoint: POST /auth/login/{apiKey}
         """
-        self.session_options.login()
+        self.session_options.login(verify)
         self.session_options.create_headers()
 
-    def logout(self):
+    def logout(self, verify: bool=True):
         """Closes an API session.
         REST Endpoint: POST /auth/logout
         """
-        self.session_options.logout()
+        self.session_options.logout(verify)
 
-    def get_user_info(self):
+    def get_user_info(self, verify: bool=True):
         """Get user info (RSA and etc.).
         REST Endpoint: GET /user/info
         """
-        self.session_options.get_user_info()
+        self.session_options.get_user_info(verify)
 
-    def get_password(self, password_id: str) -> dict:
+    def get_password(self, password_id: str, verify: bool=True) -> dict:
         """Retrieves a password by its identifier.
         REST Endpoint: GET /passwords/{password_id}
         Args:
@@ -53,9 +53,9 @@ class PassworkAPI:
             The retrieved password object dict
         """
 
-        return get_password(self.session_options, password_id)
+        return get_password(self.session_options, password_id, verify)
 
-    def get_vault(self, vault_id: str) -> dict:
+    def get_vault(self, vault_id: str, verify: bool=True) -> dict:
         """Retrieves a vault by its identifier.
         REST Endpoint: GET /vaults/{vault_id}
         Args:
@@ -64,7 +64,7 @@ class PassworkAPI:
         Returns:
             The retrieved vault object dict
         """
-        return get_vault(vault_id=vault_id, options=self.session_options)
+        return get_vault(vault_id=vault_id, options=self.session_options, verify=verify)
 
     def get_vault_password(self, vault_item: dict) -> str:
         """Retrieves the password for a given vault item.
@@ -131,15 +131,15 @@ class PassworkAPI:
         [decrypt_and_save_password_attachment(attachment, password_encryption_key, download_path)
          for attachment in attachments]
 
-    def delete_password(self, password_id: str):
+    def delete_password(self, password_id: str, verify: bool=True):
         """Deletes a password by its identifier.
 
         Args:
             password_id: The identifier of the password to be deleted
         """
-        delete_password(password_id, self.session_options)
+        delete_password(password_id, self.session_options, verify)
 
-    def search_password(self, **kwargs) -> list:
+    def search_password(self,  verify: bool=True, **kwargs) -> list:
         """Searches for passwords matching given criteria.
 
         REST Endpoint: POST /passwords/search
@@ -157,10 +157,10 @@ class PassworkAPI:
             Array of password items
         """
         search_params = kwargs
-        search_results = search_passwords(self.session_options, search_params)
+        search_results = search_passwords(self.session_options, search_params, verify)
         return search_results
 
-    def add_password(self, password_adding_fields: dict, vault_item: dict, vault_password: str) -> dict:
+    def add_password(self, password_adding_fields: dict, vault_item: dict, vault_password: str, verify: bool=True) -> dict:
         """Adds a new password.
 
         REST Endpoint: POST /passwords
@@ -206,9 +206,10 @@ class PassworkAPI:
             vault_item,
             vault_password,
             options=self.session_options,
+            verify=verify,
         )
 
-    def get_inbox_passwords(self) -> list[dict]:
+    def get_inbox_passwords(self, verify: bool=True) -> list[dict]:
         """Retrieves a list of all inbox passwords from the configured source.
 
         REST Endpoint: POST /sharing/inbox/list
@@ -217,9 +218,9 @@ class PassworkAPI:
         list[dict]: A list of dictionaries, where each dictionary represents an inbox password.
         """
 
-        return get_inbox_passwords(self.session_options)
+        return get_inbox_passwords(self.session_options, verify)
 
-    def get_inbox_password(self, inbox_password_id: str) -> dict:
+    def get_inbox_password(self, inbox_password_id: str, verify: bool=True) -> dict:
         """Retrieves a specific inbox password based on its ID.
 
         REST Endpoint: POST /sharing/inbox/{inbox_password_id}
@@ -231,7 +232,7 @@ class PassworkAPI:
             dict: A dictionary containing the details of the requested inbox password.
         """
 
-        return get_inbox_password(inbox_password_id, self.session_options)
+        return get_inbox_password(inbox_password_id, self.session_options, verify)
 
     def get_inbox_encryption_key(self, inbox_password) -> str:
         """Decrypts the encryption key for a password item.

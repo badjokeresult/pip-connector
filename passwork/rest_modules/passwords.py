@@ -12,11 +12,12 @@ from ..utils import (
 )
 
 
-def get_password(options, password_id):
+def get_password(options, password_id, verify: bool=True):
     # receive password item
     response = requests.get(
         url=f"{options.host}/passwords/{password_id}",
         headers=options.request_headers,
+        verify=verify,
     )
     if is_failed_status_code(
         status_code=response.status_code,
@@ -40,10 +41,11 @@ def get_attachments(password_item: dict, options):
     ]
 
 
-def get_attachment(password_id: str, attachment_id: str, options):
+def get_attachment(password_id: str, attachment_id: str, options, verify: bool=True):
     response = requests.get(
         url=f"{options.host}/passwords/{password_id}/attachment/{attachment_id}",
         headers=options.request_headers,
+        verify=verify,
     )
 
     if is_failed_status_code(
@@ -55,7 +57,7 @@ def get_attachment(password_id: str, attachment_id: str, options):
     return response.json().get("data")
 
 
-def search_passwords(options, search_params: dict):
+def search_passwords(options, search_params: dict, verify: bool=True):
     """
     search_params = {
         "query": "",
@@ -71,6 +73,7 @@ def search_passwords(options, search_params: dict):
         url=f"{options.host}/passwords/search",
         json=search_params,
         headers=options.request_headers,
+        verify=verify,
     )
 
     search_result = response.json().get("data")
@@ -82,7 +85,7 @@ def search_passwords(options, search_params: dict):
     return search_result
 
 
-def add_password(fields: dict, vault: dict, vault_password: str, options):
+def add_password(fields: dict, vault: dict, vault_password: str, options, verify: bool=True):
     if not fields:
         fields = {}
 
@@ -105,7 +108,7 @@ def add_password(fields: dict, vault: dict, vault_password: str, options):
     fields.setdefault("name", "")
 
     response = requests.post(
-        url=f"{options.host}/passwords", json=fields, headers=options.request_headers
+        url=f"{options.host}/passwords", json=fields, headers=options.request_headers, verify=verify
     )
 
     if is_failed_status_code(
@@ -116,9 +119,9 @@ def add_password(fields: dict, vault: dict, vault_password: str, options):
     return response.json().get("data")
 
 
-def delete_password(password_id: str, options):
+def delete_password(password_id: str, options, verify: bool=True):
     response = requests.delete(
-        url=f"{options.host}/passwords/{password_id}", headers=options.request_headers
+        url=f"{options.host}/passwords/{password_id}", headers=options.request_headers, verify=verify
     )
 
     if is_failed_status_code(
@@ -130,9 +133,9 @@ def delete_password(password_id: str, options):
     logger.success(f"Deletion of password with id {password_id} completed successfully")
 
 
-def get_inbox_passwords(options):
+def get_inbox_passwords(options, verify: bool=True):
     response = requests.get(
-        url=f"{options.host}/sharing/inbox/list", headers=options.request_headers
+        url=f"{options.host}/sharing/inbox/list", headers=options.request_headers, verify=verify
     )
 
     if is_failed_status_code(
@@ -144,9 +147,9 @@ def get_inbox_passwords(options):
     return response.json().get("data")
 
 
-def get_inbox_password(inbox_password_id, options):
+def get_inbox_password(inbox_password_id, options, verify: bool=True):
     response = requests.post(
-        url=f"{options.host}/sharing/inbox/{inbox_password_id}", headers=options.request_headers
+        url=f"{options.host}/sharing/inbox/{inbox_password_id}", headers=options.request_headers, verify=verify
     )
 
     if is_failed_status_code(
