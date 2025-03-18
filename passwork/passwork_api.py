@@ -29,7 +29,7 @@ class PassworkAPI:
         REST Endpoint: POST /auth/login/{apiKey}
         """
         self.session_options.login(verify)
-        self.session_options.create_headers()
+        self.session_options.create_headers(verify)
 
     def logout(self, verify: bool=True):
         """Closes an API session.
