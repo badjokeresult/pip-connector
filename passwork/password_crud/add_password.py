@@ -69,7 +69,7 @@ def add_password(api: PassworkAPI, password_adding_fields: dict, vault_id: str =
 
     vault_id = vault_id if vault_id else api.get_password(password_id=password_id)["vaultId"]
     password_adding_fields["vaultId"] = vault_id
-    vault_item = api.get_vault(vault_id=vault_id)
+    vault_item = api.get_vault(vault_id=vault_id, verify=verify)
     vault_password = api.get_vault_password(vault_item=vault_item)
 
     added_password_info = api.add_password(password_adding_fields, vault_item, vault_password, verify)
