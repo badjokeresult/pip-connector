@@ -22,16 +22,14 @@ def search_password(api: PassworkAPI, search_params: dict) -> list:
     Returns:
         list: An array of password items.
 
-    This function logs in to the Passwork API, searches for passwords based on the provided criteria,
-    and then logs out from the API.
+    This function doesn't provide the API login and logout, API should be logged in at the call of function,
+    after that you can call logout of API in your upper-level code
 
     Example usage:
         api = PassworkAPI(credentials)\n
         search_params = {"colors": [1, 3]}\n
         passwords = search_passwords(api, search_params)
     """
-    # Login to the Passwork API
-    api.login()
 
     # Search for passwords based on the provided criteria
     found_passwords = api.search_password(**search_params)
@@ -42,8 +40,5 @@ def search_password(api: PassworkAPI, search_params: dict) -> list:
         logger.success(f"Found password IDs: {', '.join(found_passwords_ids)}")
         for numb, found_password in enumerate(found_passwords):
             logger.success(f"Found password #{numb+1}/{len(found_passwords)}: {found_password}")
-
-    # Logout from the Passwork API
-    api.logout()
 
     return found_passwords

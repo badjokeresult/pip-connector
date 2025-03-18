@@ -24,9 +24,8 @@ def get_inbox_password(
         dict: A dictionary containing the retrieved inbox password information.
         None: if inbox_password_id is not specified.
 
-    This function authenticates with the Passwork API, retrieves inbox password details, including associated vault,
-    custom fields, attachments, and plaintext value. If specified, it
-    logs this information using the logger.
+    This function doesn't provide the API login and logout, API should be logged in at the call of function,
+    after that you can call logout of API in your upper-level code 
 
     Example usage:
         api = PassworkAPI(credentials)\n

@@ -21,9 +21,8 @@ def get_password(api: PassworkAPI,
     Returns:
         dict: A dictionary containing the retrieved password information.
 
-    This function authenticates with the Passwork API, retrieves password details, including associated vault,
-    custom fields, attachments, and plaintext value. If specified, it
-    logs this information using the logger.
+    This function doesn't provide the API login and logout, API should be logged in at the call of function,
+    after that you can call logout of API in your upper-level code 
 
     Example usage:
         api = PassworkAPI(credentials)\n
@@ -32,8 +31,6 @@ def get_password(api: PassworkAPI,
     Raises:
         ValueError: If password_id is empty or None.
     """
-
-    api.login()
 
     password_item = api.get_password(password_id=password_id)
 

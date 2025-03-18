@@ -17,8 +17,8 @@ def add_password(api: PassworkAPI, password_adding_fields: dict, vault_id: str =
     Returns:
         dict: Information about the added password.
 
-    This function logs in to the Passwork API, adds a new password with the provided fields to the specified vault or
-    the vault of an existing password. It then logs out from the API.
+    This function doesn't provide the API login and logout, API should be logged in at the call of function,
+    after that you can call logout of API in your upper-level code 
 
     Example usage:
         api = PassworkAPI(options_override=options_override)\n
@@ -67,8 +67,6 @@ def add_password(api: PassworkAPI, password_adding_fields: dict, vault_id: str =
     #     ]
     # }
 
-    api.login()
-
     vault_id = vault_id if vault_id else api.get_password(password_id=password_id)["vaultId"]
     password_adding_fields["vaultId"] = vault_id
     vault_item = api.get_vault(vault_id=vault_id)
@@ -76,7 +74,5 @@ def add_password(api: PassworkAPI, password_adding_fields: dict, vault_id: str =
 
     added_password_info = api.add_password(password_adding_fields, vault_item, vault_password)
     logger.success(f"Password with id {added_password_info['id']} has been added")
-
-    api.logout()
 
     return added_password_info
