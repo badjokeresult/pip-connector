@@ -7,7 +7,8 @@ from passwork.passwork_api import PassworkAPI
 def get_password(api: PassworkAPI,
                  password_id: str,
                  download_attachments_path: str = "",
-                 log_pretty_data: bool = True) -> dict:
+                 log_pretty_data: bool = True,
+                 verify: bool = True) -> dict:
 
     """
     Retrieve password information from Passwork API.
@@ -32,10 +33,10 @@ def get_password(api: PassworkAPI,
         ValueError: If password_id is empty or None.
     """
 
-    password_item = api.get_password(password_id=password_id)
+    password_item = api.get_password(password_id=password_id, verify=verify)
 
     vault_id = password_item.get("vaultId")
-    vault_item = api.get_vault(vault_id=vault_id)
+    vault_item = api.get_vault(vault_id=vault_id, verify=verify)
 
     vault_password = api.get_vault_password(vault_item=vault_item)
     password_encryption_key = api.get_password_encryption_key(

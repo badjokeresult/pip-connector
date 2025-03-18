@@ -1,7 +1,7 @@
 from passwork.passwork_api import PassworkAPI
 
 
-def delete_password(api: PassworkAPI, password_id: str) -> None:
+def delete_password(api: PassworkAPI, password_id: str, verify: bool=True) -> None:
     """
     Delete a password from the Passwork API.
 
@@ -24,4 +24,4 @@ def delete_password(api: PassworkAPI, password_id: str) -> None:
     """
 
     # Delete the specified password
-    api.delete_password(password_id=password_id)
+    api.delete_password(password_id=password_id, verify=verify)

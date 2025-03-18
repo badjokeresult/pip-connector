@@ -2,7 +2,7 @@ from loguru import logger
 from passwork.passwork_api import PassworkAPI
 
 
-def add_password(api: PassworkAPI, password_adding_fields: dict, vault_id: str = None, password_id: str = None) -> dict:
+def add_password(api: PassworkAPI, password_adding_fields: dict, vault_id: str = None, password_id: str = None, verify: bool=True) -> dict:
     """
     Add a new password to Passwork.
 
@@ -72,7 +72,7 @@ def add_password(api: PassworkAPI, password_adding_fields: dict, vault_id: str =
     vault_item = api.get_vault(vault_id=vault_id)
     vault_password = api.get_vault_password(vault_item=vault_item)
 
-    added_password_info = api.add_password(password_adding_fields, vault_item, vault_password)
+    added_password_info = api.add_password(password_adding_fields, vault_item, vault_password, verify)
     logger.success(f"Password with id {added_password_info['id']} has been added")
 
     return added_password_info

@@ -1,7 +1,7 @@
 from loguru import logger
 from passwork.passwork_api import PassworkAPI
 
-def search_password(api: PassworkAPI, search_params: dict) -> list:
+def search_password(api: PassworkAPI, search_params: dict, verify: bool=True) -> list:
     """
     Search for passwords matching given criteria.
 
@@ -32,7 +32,7 @@ def search_password(api: PassworkAPI, search_params: dict) -> list:
     """
 
     # Search for passwords based on the provided criteria
-    found_passwords = api.search_password(**search_params)
+    found_passwords = api.search_password(verify, **search_params)
 
     # Log the found passwords if any
     if found_passwords:

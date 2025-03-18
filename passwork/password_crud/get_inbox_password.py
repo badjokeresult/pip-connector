@@ -9,6 +9,7 @@ def get_inbox_password(
         inbox_password_id: str = "",
         download_attachments_path: str = "",
         log_pretty_data: bool = True,
+        verify: bool = True,
 ) -> dict | None:
 
     """
@@ -35,7 +36,6 @@ def get_inbox_password(
         ValueError: If inbox_password_id is empty or None.
     """
 
-    api.login()
     api.get_user_info()
 
     if not inbox_password_id:
@@ -53,7 +53,7 @@ def get_inbox_password(
             logger.success(f"Found inbox password #{numb + 1}/{len(inbox_passwords)}: {inbox_password}")
         return
 
-    inbox_item = api.get_inbox_password(inbox_password_id)
+    inbox_item = api.get_inbox_password(inbox_password_id, verify)
     inbox_password_item = inbox_item["password"]
     encryption_key = api.get_inbox_encryption_key(inbox_item)
 
